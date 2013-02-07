@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<setup
+        xmlns="http://databene.org/benerator/0.7.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://databene.org/benerator/0.7.0 http://databene.org/benerator-0.7.0.xsd"
+        >
+
+    <import platforms="db"/>
+
+    <comment>Data for patient registration details excel export</comment>
+
+    <setting name="stage" default="development"/>
+    <setting name="database" default="tama"/>
+    <setting name="dbCatalog" default="tama"/>
+    <setting name="dbSchema" default="tama_reports"/>
+    <setting name="dbPassword" default="p@ssw0rd"/>
+    <setting name="dbBatch" default="false"/>
+    <setting name="count" default="1000"/>
+
+    <include uri="{ftl:postgres.ben.properties}"/>
+
+    <database id="db" url="{dbUrl}" driver="{dbDriver}" catalog="{dbCatalog}" schema="{dbSchema}" user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
+
+    <generate type="patient" count="{count}" consumer="db">
+        <variable name="patientId" type="long" generator="new IncrementalIdGenerator(1000)"/>
+        <variable name="patientDocId" type="long" generator="new IncrementalIdGenerator(1000)"/>
+
+        <attribute name="PATIENT_ID" type='string' script="{''+patientId}" converter="UniqueStringConverter"/>
+        <attribute name="PATIENT_DOCUMENT_ID" type='string' script="{''+patientDocId}" converter="UniqueStringConverter"/>
+        <attribute name="DATE_OF_BIRTH" type='date' generator="CurrentDateGenerator"/>
+        <attribute name="GENDER" type="string" constant="M"/>
+        <attribute name="CLINIC_ID" type="string" constant="new"/>
+        <attribute name="GENDER" type="string" constant="M"/>
+        <attribute name="TRAVEL_TIME_TO_CLINIC" type="string" constant="0hrs 1day"/>
+        <attribute name="IVR_PASS_CODE" type="string" constant="4444"/>
+        <attribute name="IVR_LANGUAGE" type="string" constant="en"/>
+        <attribute name="CALL_PREFERENCE" type="string" constant="DPR"/>
+        <attribute name="BEST_CALL_TIME" type="date" generator="CurrentDateGenerator"/>
+        <attribute name="RECEIVE_OTC_ADVICE" type="string" constant="Y"/>
+        <attribute name="RECEIVE_APPOINTMENT_REMINDER" type="string" constant="Y"/>
+        <attribute name="REGISTERED_ON" type="date" generator="CurrentDateGenerator"/>
+        <attribute name="STATUS" type="string" constant="Active"/>
+        <attribute name="NOTES" type="string" constant="Hello world"/>
+    </generate>
+</setup>
